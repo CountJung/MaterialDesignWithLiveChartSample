@@ -1,0 +1,160 @@
+﻿<Window x:Class="MaterialDesignWithLiveChartSample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MaterialDesignWithLiveChartSample"
+        xmlns:vm="clr-namespace:MaterialDesignWithLiveChartSample.ViewModel"
+        xmlns:model="clr-namespace:MaterialDesignWithLiveChartSample.Model"
+        xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d" Height="1080" Width="1920"
+        Title="MainWindow" Left="0" Top="0"
+        d:DataContext="{d:DesignInstance d:Type=vm:MainWindowViewModel, IsDesignTimeCreatable=True}"
+        Style="{StaticResource MaterialDesignWindowCustom}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{StaticResource MaterialDesignBody}">
+    
+    <!--Resource-->
+    <Window.Resources>
+    </Window.Resources>
+    
+    <!--Windows Bar-->
+    <local:MaterialDesignWindowCustom.HeaderContent>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" Grid.Column="0" WindowChrome.IsHitTestVisibleInChrome="True" 
+                          x:Name="MenuToggleButton" Margin="2"/>
+            <TextBlock Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Margin="2" Grid.Column="1" />
+        </Grid>
+    </local:MaterialDesignWindowCustom.HeaderContent>
+    
+    <!--Main Content-->
+    <Window.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <!--Header Hamberger-->
+            <MaterialDesign:DrawerHost Grid.RowSpan="3" IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" Panel.ZIndex="1">
+                <MaterialDesign:DrawerHost.LeftDrawerContent>
+                    <TextBlock Width="250" TextWrapping="Wrap" Text="Reserved for Settings, Options" 
+                           VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
+                </MaterialDesign:DrawerHost.LeftDrawerContent>
+            </MaterialDesign:DrawerHost>
+            <!--Text Menu-->
+            <!--Material Design MVVM Binding with Style has submenu issue-->
+            <Menu Grid.Row="0" Height="40"><!--ItemsSource="{Binding MenuViewModelInst.MenuItem}"-->
+                <!--<Menu.Resources>
+                    <Style TargetType="{x:Type Menu}">
+                        <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignPaper}"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Menu}">
+                                    <Border Background="{DynamicResource MaterialDesignPaper}" />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Header" Value="{Binding Path=Header}"/>
+                        <Setter Property="Command" Value="{Binding Path=Command}"/>
+                        <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignPaper}"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                    <HierarchicalDataTemplate DataType="{x:Type md:MenuModel}" ItemsSource="{Binding SubMenu}"/>
+                </Menu.Resources>-->
+                <MenuItem Header="{Binding Path=MenuViewModelInst.MenuItem[0].Header}">
+                    <MenuItem Header="{Binding Path=MenuViewModelInst.MenuItem[0].SubMenu[0].Header}" Command="{Binding MenuViewModelInst.MenuItem[0].SubMenu[0].Command}"/>
+                    <MenuItem Header="{Binding Path=MenuViewModelInst.MenuItem[0].SubMenu[1].Header}" Command="{Binding MenuViewModelInst.MenuItem[0].SubMenu[1].Command}"/>
+                </MenuItem>
+                <MenuItem Header="{Binding MenuViewModelInst.MenuItem[1].Header}">
+                    <MenuItem Header="{Binding Path=MenuViewModelInst.MenuItem[1].SubMenu[0].Header}" Command="{Binding MenuViewModelInst.MenuItem[1].SubMenu[0].Command}"/>
+                    <MenuItem Header="{Binding Path=MenuViewModelInst.MenuItem[1].SubMenu[1].Header}" Command="{Binding MenuViewModelInst.MenuItem[1].SubMenu[1].Command}"/>
+                </MenuItem>
+            </Menu>
+            <!--Tool Bar Menu-->
+            <Menu Grid.Row="1">
+                <MenuItem ><!--Style="{DynamicResource toolbarMenu}"-->
+                    <MenuItem.Header>
+                        <StackPanel>
+                            <MaterialDesign:PackIcon Kind="VectorRectangle" HorizontalAlignment="Center" Height="30" Width="30">
+                                <MaterialDesign:PackIcon.LayoutTransform>
+                                    <RotateTransform Angle="90" />
+                                </MaterialDesign:PackIcon.LayoutTransform>
+                            </MaterialDesign:PackIcon>
+                            <TextBlock Text="Measure" HorizontalAlignment="Center" FontSize="10"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+
+                    <MenuItem Header="Line" InputGestureText="D" Command="{Binding MenuItemTestCmd}">
+                        <MenuItem.Icon>
+                            <MaterialDesign:PackIcon Kind="VectorLine" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Angle" InputGestureText="A">
+                        <MenuItem.Icon>
+                            <MaterialDesign:PackIcon Kind="AngleAcute" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Polyline">
+                        <MenuItem.Icon>
+                            <MaterialDesign:PackIcon Kind="VectorRadius" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Area">
+                        <MenuItem.Icon>
+                            <MaterialDesign:PackIcon Kind="VectorSquare" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <Separator />
+
+                    <MenuItem Header="Save Annotation">
+                        <MenuItem.Icon>
+                            <MaterialDesign:PackIcon Kind="ContentSave" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+
+                <MenuItem>
+                    <MenuItem.Header>
+                        <StackPanel>
+                            <MaterialDesign:PackIcon Kind="RotateLeft" HorizontalAlignment="Center" Height="30" Width="30"/>
+                            <TextBlock Text="Rotate" HorizontalAlignment="Center" FontSize="10"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+
+                    <MenuItem Header="Left">
+                        <MenuItem.Icon>
+                            <MaterialDesign:PackIcon Kind="RotateLeftVariant" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Right">
+                        <MenuItem.Icon>
+                            <MaterialDesign:PackIcon Kind="RotateRightVariant" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+            
+            <!--Content Page-->
+            <ScrollViewer Grid.Row="2" x:Name="MainContentViewer" MaterialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
+                          HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <ContentControl Content="{Binding ControlContent, UpdateSourceTrigger=PropertyChanged, FallbackValue={x:Null}}"
+                                DataContext="{Binding SelectedControlItem}"/>
+            </ScrollViewer>
+        </Grid>
+    </Window.Content>
+</Window>
