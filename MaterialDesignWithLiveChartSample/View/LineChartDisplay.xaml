@@ -5,11 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MaterialDesignWithLiveChartSample.View"
              xmlns:vm="clr-namespace:MaterialDesignWithLiveChartSample.ViewModel"
-             xmlns:wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:lvchart="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance d:Type=vm:LineChartDisplayViewModel, IsDesignTimeCreatable=True}"
-             Background="{DynamicResource MaterialDesignPaper}"
+             Background="{DynamicResource MaterialDesignPaper}" Foreground="{StaticResource MaterialDesignBody}"
              TextElement.Foreground="{StaticResource MaterialDesignBody}">
     <Grid>
         <Grid.RowDefinitions>
@@ -17,22 +18,32 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="LineChart Content" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <wpf:CartesianChart Grid.Row="2">
+        <TextBlock Grid.Row="0" Text="LineChart Content" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource TextBlockPaperTitle}"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Text="Chart Data Input" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
+            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="First Data" Style="{StaticResource TextBoxAccentContent}"/>
+            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Second Data" Style="{StaticResource TextBoxAccentContent}"/>
+            <Button Content="Add" Margin="5,0"/>
+        </StackPanel>
+        <lvchart:CartesianChart Grid.Row="2">
             <!--<wpf:CartesianChart.Series>
                 <wpf:StepLineSeries Values="9,6,5,7,8,9,7,6,7,5" PointGeometrySize="0"/>
                 <wpf:StepLineSeries Values="1,4,3,1,4,2,1,2,3,5" AlternativeStroke="Transparent"
                                     PointGeometry="{x:Null}" StrokeThickness="3"/>
                 <wpf:LineSeries Values="1,3,15,17,18,29,27,26,37,35" PointGeometrySize="0"/>
             </wpf:CartesianChart.Series>-->
-            <wpf:CartesianChart Series="{Binding Model.SeriesCollection}" LegendLocation="Right">
-                <wpf:CartesianChart.AxisX>
-                    <wpf:Axis Title="Salesman" Labels="{Binding Model.Labels}" Foreground="{StaticResource MaterialDesignBody}"/>
-                </wpf:CartesianChart.AxisX>
-                <wpf:CartesianChart.AxisY>
-                    <wpf:Axis Title="Sold Apps" LabelFormatter="{Binding Model.Formatter}" Foreground="{StaticResource MaterialDesignBody}"/>
-                </wpf:CartesianChart.AxisY>
-            </wpf:CartesianChart>
-        </wpf:CartesianChart>
+            <lvchart:CartesianChart Series="{Binding Model.SeriesCollection}" LegendLocation="Right" 
+                                    Style="{StaticResource LineChartStyle}">
+                <!--<lvchart:CartesianChart.DataTooltip>
+                    <lvchart:DefaultTooltip Background="{StaticResource MaterialDesignPaper}"/>
+                </lvchart:CartesianChart.DataTooltip>-->
+                <lvchart:CartesianChart.AxisX>
+                    <lvchart:Axis Title="Salesman" Labels="{Binding Model.Labels}" />
+                </lvchart:CartesianChart.AxisX>
+                <lvchart:CartesianChart.AxisY>
+                    <lvchart:Axis Title="Sold Apps" LabelFormatter="{Binding Model.Formatter}" />
+                </lvchart:CartesianChart.AxisY>
+            </lvchart:CartesianChart>
+        </lvchart:CartesianChart>
     </Grid>
 </UserControl>

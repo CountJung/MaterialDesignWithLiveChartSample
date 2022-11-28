@@ -1,10 +1,12 @@
 ﻿using LiveCharts;
 using LiveCharts.Wpf;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace MaterialDesignWithLiveChartSample.Model
 {
@@ -19,13 +21,13 @@ namespace MaterialDesignWithLiveChartSample.Model
             {
                 new LineSeries
                 {
-                    Title = "2015", LineSmoothness=0, PointGeometrySize=0,
+                    Title = "2015", /*LineSmoothness=0, PointGeometrySize=0, Fill=Brushes.Transparent,*/
                     Values = new ChartValues<double> { 10, 50, 39, 50 }
                 },
                 //adding series will update and animate the chart automatically
                 new LineSeries
                 {
-                    Title = "2016", LineSmoothness=0, PointGeometrySize=0,
+                    Title = "2016", /*LineSmoothness=0, PointGeometrySize=0, Fill=Brushes.Transparent,*/
                     Values = new ChartValues<double> { 11, 56, 42 }
                 }
             };
