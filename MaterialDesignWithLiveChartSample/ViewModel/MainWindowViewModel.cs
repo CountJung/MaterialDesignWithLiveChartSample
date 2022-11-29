@@ -61,7 +61,9 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
         }
         private void SetDarkTheme(bool dark)
         {
-            ITheme theme = MainModel!.MainThemePallette!.GetTheme();
+            if (MainModel is null)
+                return;
+            ITheme theme = MainModel.MainThemePallette!.GetTheme();
             IBaseTheme baseTheme = dark ? new MaterialDesignDarkTheme() : new MaterialDesignLightTheme();
             theme.SetBaseTheme(baseTheme);
             MainModel.MainThemePallette.SetTheme(theme);

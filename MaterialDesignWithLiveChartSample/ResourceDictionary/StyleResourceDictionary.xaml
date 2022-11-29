@@ -214,8 +214,31 @@
     </Style>
     
     <!--Live Chart Area-->
+    <!--Cartesian Chart Base-->
+    <Style x:Key="CartesianChartStyleBase" TargetType="{x:Type lvchart:CartesianChart}">
+        <Style.Resources>
+            <Style TargetType="lvchart:DefaultTooltip">
+                <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}"/>
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
+            </Style>
+        </Style.Resources>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
+    </Style>
     <!--Line Chart-->
-    <Style x:Key="LineChartStyle" TargetType="{x:Type lvchart:CartesianChart}">
+    <Style x:Key="LineChartStyle" TargetType="{x:Type lvchart:CartesianChart}" BasedOn="{StaticResource CartesianChartStyleBase}">
+        <Style.Resources>
+            <Style TargetType="lvchart:Axis">
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
+            </Style>
+            <Style TargetType="lvchart:LineSeries">
+                <Setter Property="PointGeometrySize" Value="0"/>
+                <Setter Property="LineSmoothness" Value="0"/>
+                <Setter Property="Fill" Value="Transparent"/>
+            </Style>
+        </Style.Resources>
+    </Style>
+    <!--Pie Chart-->
+    <Style x:Key="PieChartStyle" TargetType="{x:Type lvchart:PieChart}">
         <Style.Resources>
             <Style TargetType="lvchart:DefaultTooltip">
                 <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}"/>
@@ -224,10 +247,12 @@
             <Style TargetType="lvchart:Axis">
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
             </Style>
-            <Style TargetType="lvchart:LineSeries">
-                <Setter Property="PointGeometrySize" Value="0"/>
-                <Setter Property="LineSmoothness" Value="0"/>
-                <Setter Property="Fill" Value="Transparent"/>
+            <Style TargetType="lvchart:PieSeries">
+                <Setter Property="StrokeThickness" Value="0"></Setter>
+                <Setter Property="DataLabels" Value="True"></Setter>
+                <Setter Property="LabelPosition" Value="OutsideSlice"></Setter>
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"></Setter>
+                <Setter Property="FontSize" Value="20"></Setter>
             </Style>
         </Style.Resources>
         <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
