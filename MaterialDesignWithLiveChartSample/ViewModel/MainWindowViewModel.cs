@@ -40,11 +40,8 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
 
         private void InitializeCustomControls()
         {
-            ControlItems item;
-            item = new ControlItems("LineChartDisplay", typeof(LineChartDisplay));
-            ViewControlItems?.Add(item);
-            item = new ControlItems("PieChartDisplay", typeof(PieChartDisplay));
-            ViewControlItems?.Add(item);
+            ViewControlItems?.Add(new ControlItems("LineChartDisplay", typeof(LineChartDisplay)));
+            ViewControlItems?.Add(new ControlItems("PieChartDisplay", typeof(PieChartDisplay)));
             SelectedControlItem = ViewControlItems?.First();
         }
 

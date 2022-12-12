@@ -248,11 +248,11 @@
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
             </Style>
             <Style TargetType="lvchart:PieSeries">
-                <Setter Property="StrokeThickness" Value="0"></Setter>
-                <Setter Property="DataLabels" Value="True"></Setter>
-                <Setter Property="LabelPosition" Value="OutsideSlice"></Setter>
-                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"></Setter>
-                <Setter Property="FontSize" Value="20"></Setter>
+                <Setter Property="StrokeThickness" Value="0"/>
+                <Setter Property="DataLabels" Value="True"/>
+                <Setter Property="LabelPosition" Value="OutsideSlice"/>
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
+                <Setter Property="FontSize" Value="20"/>
             </Style>
         </Style.Resources>
         <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>

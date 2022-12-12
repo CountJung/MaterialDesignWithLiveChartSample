@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MaterialDesignWithLiveChartSample.View"
+             xmlns:vm="clr-namespace:MaterialDesignWithLiveChartSample.ViewModel"
              xmlns:lvchart="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             d:DataContext="{d:DesignInstance d:Type=vm:PieChartDisplayViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" Background="{DynamicResource MaterialDesignPaper}" Foreground="{StaticResource MaterialDesignBody}"
              d:DesignHeight="400" d:DesignWidth="700">
     <Grid>
@@ -16,22 +18,36 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="PieChart Content" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource TextBlockPaperTitle}"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBlock Text="Chart Data Input" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
-            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="First Data" Style="{StaticResource TextBoxAccentContent}"/>
-            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Second Data" Style="{StaticResource TextBoxAccentContent}"/>
-            <Button Content="Add" Margin="5,0"/>
+            <TextBlock Text="Pie Chart Count" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
+            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Chart Count" Style="{StaticResource TextBoxAccentContent}"/>
+            <Button Content="Set" Margin="5,0"/>
         </StackPanel>
-        <lvchart:PieChart Grid.Row="2" LegendLocation="Left" Hoverable="False" Style="{StaticResource PieChartStyle}">
-            <lvchart:PieChart.Series>
-                <lvchart:PieSeries Title="Maria" Values="3" DataLabels="True"
-                               />
-                <lvchart:PieSeries Title="Charles" Values="4" DataLabels="True" 
-                               />
-                <lvchart:PieSeries Title="Frida" Values="6" DataLabels="True" 
-                               />
-                <lvchart:PieSeries Title="Frederic" Values="2" DataLabels="True" 
-                               />
-            </lvchart:PieChart.Series>
-        </lvchart:PieChart>
+        <ItemsControl Grid.Row="2" ItemsSource="{Binding Model.PieChartnode}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <!--DataContext.Model.PieChartnode
+                        RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}-->
+                        <lvchart:PieChart Grid.Row="0" LegendLocation="None" Style="{StaticResource PieChartStyle}" Margin="10,10"
+                                      Series="{Binding PieChartSeries}"/>
+                        <TextBlock Grid.Row="1" Text="{Binding PieChartName}" Style="{StaticResource TextBlockAccentContent}"/>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        <!--<WrapPanel Grid.Row="2" Orientation="Horizontal" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <lvchart:PieChart LegendLocation="None" Style="{StaticResource PieChartStyle}" 
+                              Margin="10,10" Series="{Binding Model.PieChartSeriesCollection}"/>
+        </WrapPanel>-->
     </Grid>
 </UserControl>
