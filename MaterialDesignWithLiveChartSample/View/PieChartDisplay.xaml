@@ -19,13 +19,15 @@
         <TextBlock Grid.Row="0" Text="PieChart Content" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource TextBlockPaperTitle}"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock Text="Pie Chart Count" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
-            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Chart Count" Style="{StaticResource TextBoxAccentContent}"/>
-            <Button Content="Set" Margin="5,0"/>
+            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Chart Count" Style="{StaticResource TextBoxAccentContent}" 
+                     Text="{Binding Model.PiechartCount}"/>
+            <Button Content="Set" Margin="5,0" Command="{Binding PieChartCountSetCmd}"/>
+            <Button Content="Test" Margin="5,0" Command="{Binding TestCommandBtnCmd}" Visibility="Collapsed"/>
         </StackPanel>
-        <ItemsControl Grid.Row="2" ItemsSource="{Binding Model.PieChartnode}">
+        <ItemsControl x:Name="PieChartCollectionDisplay" Margin="0,10,0,0" Grid.Row="2" ItemsSource="{Binding Model.PieChartData}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal"/>
+                    <StackPanel Orientation="Horizontal"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
@@ -38,7 +40,7 @@
                         <!--DataContext.Model.PieChartnode
                         RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}-->
                         <lvchart:PieChart Grid.Row="0" LegendLocation="None" Style="{StaticResource PieChartStyle}" Margin="10,10"
-                                      Series="{Binding PieChartSeries}"/>
+                                      Series="{Binding PieChartSeries, Mode=OneTime}"/> <!--Has Memory Leak issue-->
                         <TextBlock Grid.Row="1" Text="{Binding PieChartName}" Style="{StaticResource TextBlockAccentContent}"/>
                     </Grid>
                 </DataTemplate>

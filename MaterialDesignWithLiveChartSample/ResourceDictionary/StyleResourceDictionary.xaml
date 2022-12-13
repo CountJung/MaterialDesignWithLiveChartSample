@@ -212,6 +212,18 @@
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="MinWidth" Value="30"/>
     </Style>
+    <!--Button-->
+    <!--Rounded Button-->
+    <Style x:Key="ButtonRoundedPrimary" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}">
+        <Setter Property="Width" Value="auto"/>
+        <Setter Property="Height" Value="auto"/>
+        <Setter Property="FontSize" Value="15"/>
+    </Style>
+    <Style x:Key="ButtonRoundedSecond" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}">
+        <Setter Property="Width" Value="auto"/>
+        <Setter Property="Height" Value="auto"/>
+        <Setter Property="FontSize" Value="15"/>
+    </Style>
     
     <!--Live Chart Area-->
     <!--Cartesian Chart Base-->

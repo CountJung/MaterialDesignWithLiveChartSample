@@ -6,10 +6,12 @@ using System.Collections.ObjectModel;
 
 namespace MaterialDesignWithLiveChartSample.Model
 {
-    public class PieChartNode
+    public class PieChartNode : ViewModelBase
     {
-        public SeriesCollection? PieChartSeries { get; set; }
-        public string? PieChartName { get; set; }
+        private SeriesCollection? pieChartSeries;
+        public SeriesCollection? PieChartSeries { get => pieChartSeries; set => Set(ref pieChartSeries, value, nameof(PieChartSeries)); }
+        private string? pieChartName;
+        public string? PieChartName { get => pieChartName; set => Set(ref pieChartName, value, nameof(PieChartName)); }
         public PieChartNode(SeriesCollection? pieChartSeries, string? pieChartName)
         {
             PieChartSeries = pieChartSeries;
@@ -18,24 +20,32 @@ namespace MaterialDesignWithLiveChartSample.Model
     }
     public class PieChartDisplayModel : ViewModelBase
     {
-        private SeriesCollection? pieChartSeriesCollection;
-        public SeriesCollection? PieChartSeriesCollection
-        { get => pieChartSeriesCollection; set => pieChartSeriesCollection = value; }
+        private uint? piechartCount;
+        public uint? PiechartCount
+        {
+            get => piechartCount;
+            set => Set(ref piechartCount, value > 50 ? 50 : value, nameof(PiechartCount));
+        }
+        /// <summary>
+        /// To avoid Binding memoryleaks by fault.
+        /// 1. apply INotifyPropertyChanged
+        /// 2. OneTime or OneWayToSource binding on XAML
+        /// 3. Use System.Windows.Data.BindingOperations.ClearBinding explicitly -> testing
+        /// </summary>
+        private ObservableCollection<PieChartNode>? pieChartData;
+        public ObservableCollection<PieChartNode>? PieChartData
+        { get => pieChartData; set => Set(ref pieChartData, value, nameof(PieChartData)); /* pieChartData = value; */}
 
-        private ObservableCollection<PieChartNode>? pieChartNode;
-        public ObservableCollection<PieChartNode>? PieChartnode
-        { get => pieChartNode; set => pieChartNode = value; }
         public PieChartDisplayModel()
         {
-            PieChartnode = new ObservableCollection<PieChartNode>();
+            PieChartData = new ObservableCollection<PieChartNode>();
             for (int i = 0; i < 5; i++)
             {
                 string nodeName = string.Format("Pie Chart {0}", i);
-                PieChartnode.Add(new PieChartNode(GetPieChartSeriesCollection(), nodeName));
+                PieChartData.Add(new PieChartNode(GetPieChartSeriesCollection(), nodeName));
             }
-
         }
-        private SeriesCollection GetPieChartSeriesCollection() => new()
+        public SeriesCollection GetPieChartSeriesCollection() => new()
         {
             new PieSeries
             {

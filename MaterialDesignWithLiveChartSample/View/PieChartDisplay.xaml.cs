@@ -21,9 +21,14 @@ namespace MaterialDesignWithLiveChartSample.View
     /// </summary>
     public partial class PieChartDisplay : UserControl
     {
+        /// <summary>
+        /// test
+        /// </summary>
+        public static PieChartDisplay? Instance { get; private set; }
         public PieChartDisplay()
         {
             InitializeComponent();
+            Instance = this;
             DataContext = new PieChartDisplayViewModel();
         }
     }
