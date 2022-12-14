@@ -246,6 +246,7 @@
                 <Setter Property="PointGeometrySize" Value="0"/>
                 <Setter Property="LineSmoothness" Value="0"/>
                 <Setter Property="Fill" Value="Transparent"/>
+                <Setter Property="DataLabels" Value="True"/>
             </Style>
         </Style.Resources>
     </Style>

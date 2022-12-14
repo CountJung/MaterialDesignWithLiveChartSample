@@ -32,7 +32,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid Visibility="{Binding ChartVisible, Converter={StaticResource BoolToVisible}}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
@@ -40,7 +40,7 @@
                         <!--DataContext.Model.PieChartnode
                         RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}-->
                         <lvchart:PieChart Grid.Row="0" LegendLocation="None" Style="{StaticResource PieChartStyle}" Margin="10,10"
-                                      Series="{Binding PieChartSeries, Mode=OneTime}"/> <!--Has Memory Leak issue-->
+                                      Series="{Binding PieChartSeries}"/> 
                         <TextBlock Grid.Row="1" Text="{Binding PieChartName}" Style="{StaticResource TextBlockAccentContent}"/>
                     </Grid>
                 </DataTemplate>
