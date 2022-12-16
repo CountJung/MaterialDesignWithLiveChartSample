@@ -14,17 +14,26 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="PieChart Content" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource TextBlockPaperTitle}"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBlock Text="Pie Chart Count" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
+            <TextBlock Text="Chart Count" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
             <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Chart Count" Style="{StaticResource TextBoxAccentContent}" 
-                     Text="{Binding Model.PiechartCount}"/>
+                     Text="{Binding Model.PieChartCount}"/>
             <Button Content="Set" Margin="5,0" Command="{Binding PieChartCountSetCmd}"/>
-            <Button Content="Test" Margin="5,0" Command="{Binding TestCommandBtnCmd}" Visibility="Collapsed"/>
         </StackPanel>
-        <ItemsControl x:Name="PieChartCollectionDisplay" Margin="0,10,0,0" Grid.Row="2" ItemsSource="{Binding Model.PieChartData}">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Text="Chart Manipulate" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
+            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Number" Style="{StaticResource TextBoxAccentContent}" Text="{Binding Model.CurrentChartNumber}"/>
+            <CheckBox Content="Visible" Margin="5,0" Style="{StaticResource CheckBoxAccent}" IsChecked="{Binding Model.CurrentChartVisibility}"/>
+            <TextBlock Text="Input Data" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
+            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Data" Style="{StaticResource TextBoxAccentContent}" Text="{Binding Model.PieChartData}"/>
+            <Button Content="Add" Margin="5,0" Command="{Binding AddChartDataCmd}"/>
+            <Button Content="Remove" Margin="5,0" Command="{Binding RemoveChartDataCmd}" Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}"/>
+        </StackPanel>
+        <ItemsControl x:Name="PieChartCollectionDisplay" Margin="0,20,0,0" Grid.Row="3" ItemsSource="{Binding Model.PieChartAsset}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"/>
@@ -32,24 +41,18 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid Visibility="{Binding ChartVisible, Converter={StaticResource BoolToVisible}}">
+                    <Grid Visibility="{Binding ChartVisible, Converter={StaticResource BoolToVisible}, ConverterParameter=collapsed}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <!--DataContext.Model.PieChartnode
-                        RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}-->
                         <lvchart:PieChart Grid.Row="0" LegendLocation="None" Style="{StaticResource PieChartStyle}" Margin="10,10"
-                                      Series="{Binding PieChartSeries}"/> 
-                        <TextBlock Grid.Row="1" Text="{Binding PieChartName}" Style="{StaticResource TextBlockAccentContent}"/>
+                                      Series="{Binding PieChartSeries}" Visibility="{Binding ChartVisible, Converter={StaticResource BoolToVisible}, ConverterParameter=collapsed}"/>
+                        <TextBlock Grid.Row="1" Text="{Binding PieChartName}" Style="{StaticResource TextBlockAccentContent}"
+                                   Visibility="{Binding ChartVisible, Converter={StaticResource BoolToVisible}, ConverterParameter=collapsed}"/>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        
-        <!--<WrapPanel Grid.Row="2" Orientation="Horizontal" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <lvchart:PieChart LegendLocation="None" Style="{StaticResource PieChartStyle}" 
-                              Margin="10,10" Series="{Binding Model.PieChartSeriesCollection}"/>
-        </WrapPanel>-->
     </Grid>
 </UserControl>

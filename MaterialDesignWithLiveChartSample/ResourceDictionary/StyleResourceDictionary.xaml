@@ -204,6 +204,7 @@
     <Style x:Key="TextBlockAccentContent" TargetType="{x:Type TextBlock}">
         <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
         <Setter Property="FontSize" Value="15"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
     <!--Text Box-->
     <Style x:Key="TextBoxAccentContent" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBoxBase}">
@@ -222,6 +223,13 @@
     <Style x:Key="ButtonRoundedSecond" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}">
         <Setter Property="Width" Value="auto"/>
         <Setter Property="Height" Value="auto"/>
+        <Setter Property="FontSize" Value="15"/>
+    </Style>
+    <!--Check Box-->
+    <Style x:Key="CheckBoxAccent" TargetType="{x:Type CheckBox}">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="15"/>
     </Style>
     
@@ -265,7 +273,7 @@
                 <Setter Property="DataLabels" Value="True"/>
                 <Setter Property="LabelPosition" Value="OutsideSlice"/>
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
-                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontSize" Value="10"/>
             </Style>
         </Style.Resources>
         <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>

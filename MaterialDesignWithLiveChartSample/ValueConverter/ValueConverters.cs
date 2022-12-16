@@ -13,7 +13,7 @@ namespace MaterialDesignWithLiveChartSample.ValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool flag = value is bool;
+            bool flag = value is bool && (bool)value;
             bool collapsed = parameter as string == "collapsed";
             if (flag)
                 return Visibility.Visible;
