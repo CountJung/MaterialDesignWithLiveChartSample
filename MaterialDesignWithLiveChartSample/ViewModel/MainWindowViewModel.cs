@@ -25,7 +25,10 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
                 SelectedControlItem = ViewControlItems?.ElementAt(SelectedControlIndex);
             }
         }
-
+        public enum DisplayNumber
+        {
+            LineChartNumber, PieChartNumber, DataBaseNumber
+        }
         public MainWindowViewModel()
         {
             Instance = this;
@@ -42,7 +45,8 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
         {
             ViewControlItems?.Add(new ControlItems("LineChartDisplay", typeof(LineChartDisplay)));
             ViewControlItems?.Add(new ControlItems("PieChartDisplay", typeof(PieChartDisplay)));
-            SelectedControlItem = ViewControlItems?.First();
+            ViewControlItems?.Add(new ControlItems("DataBaseDisplay", typeof(DataBaseDisplay)));
+            SelectedControlItem = ViewControlItems?[(int)DisplayNumber.PieChartNumber];
         }
 
         public ICommand MenuItemTestCmd { get; private set; }

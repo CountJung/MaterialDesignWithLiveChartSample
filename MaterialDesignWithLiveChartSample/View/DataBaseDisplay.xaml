@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="MaterialDesignWithLiveChartSample.View.DataBaseDisplay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MaterialDesignWithLiveChartSample.View"
+             xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"  Background="{DynamicResource MaterialDesignPaper}" Foreground="{StaticResource MaterialDesignBody}"
+             d:DesignHeight="400" d:DesignWidth="700">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="DataBase DML Test - Maria LocalDB Assumed" Style="{StaticResource TextBlockPaperTitle}" HorizontalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
+            <TextBlock Text="Host" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
+            <TextBox Margin="5,0" MaterialDesign:HintAssist.Hint="HostIP" Style="{StaticResource TextBoxAccentContent}"/>
+            <TextBlock Text="Port" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
+            <TextBox Margin="5,0" MaterialDesign:HintAssist.Hint="Port" Style="{StaticResource TextBoxAccentContent}"/>
+            <TextBlock Text="DataBase" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
+            <TextBox Margin="5,0" MaterialDesign:HintAssist.Hint="DataBase" Style="{StaticResource TextBoxAccentContent}"/>
+            <TextBlock Text="UserID" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
+            <TextBox Margin="5,0" MaterialDesign:HintAssist.Hint="UserID" Style="{StaticResource TextBoxAccentContent}"/>
+            <TextBlock Text="PassWord" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
+            <PasswordBox Margin="5,0" MaterialDesign:HintAssist.Hint="PassWord" Style="{StaticResource PasswordBoxAccent}"/>
+        </StackPanel>
+        <DataGrid Grid.Row="2">
+            
+        </DataGrid>
+    </Grid>
+</UserControl>

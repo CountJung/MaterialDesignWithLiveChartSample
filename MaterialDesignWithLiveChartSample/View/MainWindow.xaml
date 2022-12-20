@@ -61,6 +61,9 @@
                     <MenuItem Header="{Binding Path=MenuViewModelInst.MenuItem[1].SubMenu[0].Header}" Command="{Binding MenuViewModelInst.MenuItem[1].SubMenu[0].Command}"/>
                     <MenuItem Header="{Binding Path=MenuViewModelInst.MenuItem[1].SubMenu[1].Header}" Command="{Binding MenuViewModelInst.MenuItem[1].SubMenu[1].Command}"/>
                 </MenuItem>
+                <MenuItem Header="{Binding MenuViewModelInst.MenuItem[2].Header}">
+                    <MenuItem Header="{Binding Path=MenuViewModelInst.MenuItem[2].SubMenu[0].Header}" Command="{Binding MenuViewModelInst.MenuItem[2].SubMenu[0].Command}"/>
+                </MenuItem>
             </Menu>
             <!--Tool Bar Menu-->
             <Menu Grid.Row="1" >

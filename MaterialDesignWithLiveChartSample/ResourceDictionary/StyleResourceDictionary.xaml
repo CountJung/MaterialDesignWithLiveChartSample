@@ -3,6 +3,7 @@
                     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:lvchart="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+                    xmlns:ms="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:behaviors="clr-namespace:MaterialDesignWithLiveChartSample.Behavior"
                     xmlns:views="clr-namespace:MaterialDesignWithLiveChartSample">
     <!--Material Design Area-->
@@ -60,16 +61,16 @@
                             <!--Window Height:Padding-->
                             <md:ColorZone Padding="2" Mode="Standard" md:ElevationAssist.Elevation="Dp2"
                                           Grid.Row="0">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseDoubleClick" >
-                                        <i:InvokeCommandAction Command="{x:Static views:MaterialDesignWindowCustom.ToggleMaximize}"
+                                <ms:Interaction.Triggers>
+                                    <ms:EventTrigger EventName="MouseDoubleClick" >
+                                        <ms:InvokeCommandAction Command="{x:Static views:MaterialDesignWindowCustom.ToggleMaximize}"
                                                                CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                                <i:Interaction.Behaviors>
+                                    </ms:EventTrigger>
+                                </ms:Interaction.Triggers>
+                                <ms:Interaction.Behaviors>
                                     <behaviors:DragWindowBehavior />
                                     <behaviors:TemplateBindingBehavior TargetTemplatePropertyPath="(WindowChrome.WindowChrome).(WindowChrome.CaptionHeight)" SourceProperty="ActualHeight"/>
-                                </i:Interaction.Behaviors>
+                                </ms:Interaction.Behaviors>
                                 <Grid>
                                     <ContentControl x:Name="HeaderContent" FontSize="22" Content="{Binding Path=(views:MaterialDesignWindowCustom.HeaderContent), RelativeSource={RelativeSource TemplatedParent}}">
                                         <ContentControl.Style>
@@ -212,6 +213,12 @@
         <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}"/>
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="MinWidth" Value="30"/>
+    </Style>
+    <!--PasswordBox-->
+    <Style x:Key="PasswordBoxAccent" TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource MaterialDesignPasswordBox}">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}"/>
+        <Setter Property="FontSize" Value="15"/>
     </Style>
     <!--Button-->
     <!--Rounded Button-->
