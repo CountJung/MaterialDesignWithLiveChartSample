@@ -13,6 +13,7 @@ namespace MaterialDesignWithLiveChartSample
             MaterialDesignWindowCustom.RegisterCommands(this);
             InitializeComponent();
             DataContext = new MainWindowViewModel();
+            Closing += ((MainWindowViewModel)DataContext).OnClosingMainWindow;
         }
     }
 }

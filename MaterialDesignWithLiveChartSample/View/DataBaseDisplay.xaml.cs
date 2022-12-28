@@ -26,5 +26,14 @@ namespace MaterialDesignWithLiveChartSample.View
             InitializeComponent();
             DataContext = new DataBaseDisplayViewModel();
         }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if(DataContext!=null)
+            {
+                DataBaseDisplayViewModel.Instance!.Model!.SecurePassWord = ((PasswordBox)sender).SecurePassword;
+                DataBaseDisplayViewModel.Instance!.Model!.PassWord = ((PasswordBox)sender).Password;
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
 using MaterialDesignWithLiveChartSample.Model;
 using MaterialDesignWithLiveChartSample.View;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -48,7 +49,10 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
             ViewControlItems?.Add(new ControlItems("DataBaseDisplay", typeof(DataBaseDisplay)));
             SelectedControlItem = ViewControlItems?[(int)DisplayNumber.PieChartNumber];
         }
-
+        public void OnClosingMainWindow(object? sender, CancelEventArgs e)
+        {
+            DataBaseDisplayViewModel.Instance?.DBClose();
+        }
         public ICommand MenuItemTestCmd { get; private set; }
         private void MenuCommandTest(object sender)
         {

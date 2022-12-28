@@ -233,11 +233,19 @@
         <Setter Property="FontSize" Value="15"/>
     </Style>
     <!--Check Box-->
-    <Style x:Key="CheckBoxAccent" TargetType="{x:Type CheckBox}">
+    <Style x:Key="CheckBoxAccent" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MaterialDesignAccentCheckBox}">
         <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
-        <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="md:CheckBoxAssist.CheckBoxSize" Value="20"/>
+        <Setter Property="FontSize" Value="20"/>
+    </Style>
+    <!--DataGrid-->
+    <Style x:Key="DataGridAccent" TargetType="{x:Type DataGrid}" BasedOn="{StaticResource MaterialDesignDataGrid}">
+        <Style.Resources>
+            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
+            </Style>
+        </Style.Resources>
     </Style>
     
     <!--Live Chart Area-->
