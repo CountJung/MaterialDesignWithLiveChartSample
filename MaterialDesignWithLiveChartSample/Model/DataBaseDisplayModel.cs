@@ -24,7 +24,14 @@ namespace MaterialDesignWithLiveChartSample.Model
         public ObservableCollection<EmoticonList>? EmoticonListCollection { get; }
         private EmoticonList? selectedEmoticonList;
         public EmoticonList? SelectedEmoticonList 
-        { get => selectedEmoticonList ??= new EmoticonList(); set => Set(ref selectedEmoticonList, value, nameof(SelectedEmoticonList)); }
+        {
+            get => selectedEmoticonList ??= new EmoticonList();
+            set 
+            { 
+                Set(ref selectedEmoticonList, value, nameof(SelectedEmoticonList));
+                //DataBaseDisplayViewModel.Instance?.ModifySelectedEmoticon();
+            }
+        }
         public DataBaseDisplayModel()
         {
             EmoticonListCollection= new ObservableCollection<EmoticonList>();

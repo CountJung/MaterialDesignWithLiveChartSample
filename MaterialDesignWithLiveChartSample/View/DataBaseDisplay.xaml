@@ -29,7 +29,7 @@
             <TextBlock Text="PassWord" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
             <PasswordBox Margin="5,0" MaterialDesign:HintAssist.Hint="PassWord" Style="{StaticResource PasswordBoxAccent}" PasswordChanged="PasswordBox_PasswordChanged"/>
             <Button Margin="5 0" Content="Connect" Style="{StaticResource MaterialDesignFlatSecondaryLightBgButton}" Command="{Binding DBConnectCmd}"/>
-            <Button Margin="5,0" Content="Disconnect" Style="{StaticResource MaterialDesignFlatLightBgButton}" />
+            <Button Margin="5,0" Content="Disconnect" Style="{StaticResource MaterialDesignFlatLightBgButton}" Command="{Binding DBDisconnectCmd}"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <CheckBox Margin="5,0" Content="ConnectStatus" Style="{StaticResource CheckBoxAccent}" IsChecked="{Binding Model.DBConnected}" 
@@ -37,6 +37,7 @@
             <Button Margin="5,0" Content="ShowAll" Style="{StaticResource MaterialDesignRaisedDarkButton}" Command="{Binding SelectAllEmoticonListCmd}"/>
             <Button Margin="5,0" Content="Add" Style="{StaticResource MaterialDesignFlatAccentBgButton}" Command="{Binding AddEmoticonCmd}"/>
             <Button Margin="5,0" Content="Delete" Style="{StaticResource MaterialDesignRaisedSecondaryButton}" Command="{Binding DeleteSelectedEmoticonCmd}"/>
+            <Button Margin="5,0" Content="Modify" Style="{StaticResource MaterialDesignFlatAccentBgButton}" Command="{Binding ModifySelectedEmoticonCmd}"/>
         </StackPanel>
         <DataGrid Grid.Row="3" ItemsSource="{Binding Model.EmoticonListCollection}" SelectedItem="{Binding Model.SelectedEmoticonList}"
                   SelectionMode="Single" Style="{StaticResource DataGridAccent}"/>
