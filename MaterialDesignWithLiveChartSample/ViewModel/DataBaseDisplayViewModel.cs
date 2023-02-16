@@ -82,9 +82,9 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
                             string? header = dataColumn.ColumnName;
                             string? value = dataRow[dataColumn].ToString();
                             if (header == "ID") emoticon.ID = Convert.ToInt32(value);
-                            else if (header == "Name") emoticon.Name = value;
-                            else if (header == "Description") emoticon.Description = value;
-                            else if (header == "Emoticon") emoticon.Emoticon = value;
+                            else if (header == "Name") emoticon.Name = value!;
+                            else if (header == "Description") emoticon.Description = value!;
+                            else if (header == "Emoticon") emoticon.Emoticon = value!;
                         }
                         Model?.EmoticonListCollection?.Add(emoticon);
                     }

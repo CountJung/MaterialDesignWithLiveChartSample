@@ -12,13 +12,13 @@ namespace MaterialDesignWithLiveChartSample.Class
     public class EmoticonList
     {
         public int ID { get; set; }
-        public string? Name { get; set; }
-        public string? Emoticon { get; set; }
-        public string? Description { get; set; }
+        public string Name { get; set; }
+        public string Emoticon { get; set; }
+        public string Description { get; set; }
 
         public EmoticonList() 
         {
-
+            Name = ""; Emoticon = ""; Description = "";
         }
     }
 }

@@ -1,10 +1,15 @@
 ﻿using MaterialDesignThemes.Wpf;
+using MaterialDesignWithLiveChartSample.Class;
 using MaterialDesignWithLiveChartSample.Model;
 using MaterialDesignWithLiveChartSample.View;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace MaterialDesignWithLiveChartSample.ViewModel
 {
@@ -56,7 +61,51 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
         public ICommand MenuItemTestCmd { get; private set; }
         private void MenuCommandTest(object sender)
         {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                using PCQueue queueTask = new(1);
+                queueTask.EnqueueTask(async () =>
+                {
+                    await Task.Delay(1000);
+                    Trace.WriteLine($"task queue test Count={queueTask.RemainTaskCount}");
+                    SelectedControlItem = ViewControlItems?[0];
+                });
+                queueTask.EnqueueTask(async () =>
+                {
+                    await Task.Delay(2000);
+                    Trace.WriteLine($"More Test Count={queueTask.RemainTaskCount}");
+                    SelectedControlItem = ViewControlItems?[1];
+                });
+                queueTask.EnqueueTask(() =>
+                {
+                    Trace.WriteLine($"More Test Count={queueTask.RemainTaskCount}");
+                    SelectedControlItem = ViewControlItems?[2];
+                });
+                queueTask.EnqueueTask(async () =>
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        await Task.Delay(1000);
+                        Trace.WriteLine("Loop Test");
+                        SelectedControlItem = ViewControlItems?[i];
+                    }
+                });
 
+                using QueueTasker queueTasker = new();
+                queueTasker.EnqueueTask(async () =>
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        await Task.Delay(1000);
+                        Trace.WriteLine("Loop Test");
+                        SelectedControlItem = ViewControlItems?[i];
+                    }
+                });
+                queueTasker.EnqueueTask(() =>
+                {
+                    Trace.WriteLine($"More Test");
+                });
+            });
         }
         public ICommand ToggleChangeThemeCmd { get; private set; }
         private void ToggleChangeTheme(object sender)
