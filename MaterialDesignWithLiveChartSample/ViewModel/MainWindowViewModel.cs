@@ -61,50 +61,51 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
         public ICommand MenuItemTestCmd { get; private set; }
         private void MenuCommandTest(object sender)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            using PCQueue queueTask = new(1);
+            queueTask.EnqueueTask(async () =>
             {
-                using PCQueue queueTask = new(1);
-                queueTask.EnqueueTask(async () =>
+                await Task.Delay(1000);
+                Trace.WriteLine($"task queue test Count={queueTask.RemainTaskCount}");
+                SelectedControlItem = ViewControlItems?[0];
+            });
+            queueTask.EnqueueTask(async () =>
+            {
+                await Task.Delay(2000);
+                Trace.WriteLine($"More Test Count={queueTask.RemainTaskCount}");
+                SelectedControlItem = ViewControlItems?[1];
+            });
+            queueTask.EnqueueTask(() =>
+            {
+                Trace.WriteLine($"More Test Count={queueTask.RemainTaskCount}");
+                SelectedControlItem = ViewControlItems?[2];
+            });
+            queueTask.EnqueueTask( () =>
+            {
+                // WPF automatically ensures that bindings are updated on the main thread.
+                Application.Current.Dispatcher.Invoke(async () =>
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        await Task.Delay(1000);
+                        Trace.WriteLine("Loop Test");
+                        SelectedControlItem = ViewControlItems?[i];
+                    }
+                });
+            });
+
+            using QueueTasker queueTasker = new();
+            queueTasker.EnqueueTask(async () =>
+            {
+                for (int i = 0; i < 3; i++)
                 {
                     await Task.Delay(1000);
-                    Trace.WriteLine($"task queue test Count={queueTask.RemainTaskCount}");
-                    SelectedControlItem = ViewControlItems?[0];
-                });
-                queueTask.EnqueueTask(async () =>
-                {
-                    await Task.Delay(2000);
-                    Trace.WriteLine($"More Test Count={queueTask.RemainTaskCount}");
-                    SelectedControlItem = ViewControlItems?[1];
-                });
-                queueTask.EnqueueTask(() =>
-                {
-                    Trace.WriteLine($"More Test Count={queueTask.RemainTaskCount}");
-                    SelectedControlItem = ViewControlItems?[2];
-                });
-                queueTask.EnqueueTask(async () =>
-                {
-                    for (int i = 0; i < 3; i++)
-                    {
-                        await Task.Delay(1000);
-                        Trace.WriteLine("Loop Test");
-                        SelectedControlItem = ViewControlItems?[i];
-                    }
-                });
-
-                using QueueTasker queueTasker = new();
-                queueTasker.EnqueueTask(async () =>
-                {
-                    for (int i = 0; i < 3; i++)
-                    {
-                        await Task.Delay(1000);
-                        Trace.WriteLine("Loop Test");
-                        SelectedControlItem = ViewControlItems?[i];
-                    }
-                });
-                queueTasker.EnqueueTask(() =>
-                {
-                    Trace.WriteLine($"More Test");
-                });
+                    Trace.WriteLine("Loop Test");
+                    SelectedControlItem = ViewControlItems?[i];
+                }
+            });
+            queueTasker.EnqueueTask(() =>
+            {
+                Trace.WriteLine($"More Test");
             });
         }
         public ICommand ToggleChangeThemeCmd { get; private set; }
