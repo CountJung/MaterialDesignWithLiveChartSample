@@ -1,13 +1,60 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace MaterialDesignWithLiveChartSample.Class
 {
+    // C# Threading origin example
+    class ProducerConsumerQueue : IDisposable
+    {
+        EventWaitHandle _wh = new AutoResetEvent(false);
+        Thread _worker;
+        readonly object _locker = new object();
+        Queue<string> _tasks = new Queue<string>();
+
+        public ProducerConsumerQueue()
+        {
+            _worker = new Thread(Work);
+            _worker.Start();
+        }
+
+        public void EnqueueTask(string task)
+        {
+            lock (_locker) _tasks.Enqueue(task);
+            _wh.Set();
+        }
+
+        public void Dispose()
+        {
+            EnqueueTask(null!);     // Signal the consumer to exit.
+            _worker.Join();         // Wait for the consumer's thread to finish.
+            _wh.Close();            // Release any OS resources.
+        }
+
+        void Work()
+        {
+            while (true)
+            {
+                string? task = null;
+                lock (_locker)
+                    if (_tasks.Count > 0)
+                    {
+                        task = _tasks.Dequeue();
+                        if (task == null) return;
+                    }
+                if (task != null)
+                {
+                    Console.WriteLine("Performing task: " + task);
+                    Thread.Sleep(1000);  // simulate work...
+                }
+                else
+                    _wh.WaitOne();         // No more tasks - wait for a signal
+            }
+        }
+    }
+
     //keyword using for easily dispose
     public class QueueTasker : IDisposable
     {
@@ -50,8 +97,55 @@ namespace MaterialDesignWithLiveChartSample.Class
                         if (task == null) return; //dispose end
                     }
                 }
-                if(task == null)
+                if (task == null)
                     wh.WaitOne();         // No more tasks - wait for a signal
+            }
+        }
+    }
+    public class SequenceTasker
+    {
+        readonly EventWaitHandle wh = new AutoResetEvent(false);
+        readonly Task worker;
+        readonly object locker = new();
+        readonly Dictionary<string, Func<Task>> tasks = new();
+
+        public SequenceTasker()
+        {
+            worker = Task.Run(Work);
+        }
+
+        public void AddSequence(string seqName, Func<Task> task)
+        {
+            lock (locker) tasks.TryAdd(seqName, task);
+        }
+        public void RemoveSequence(string seqName)
+        {
+            lock (locker) tasks.Remove(seqName);
+        }
+        public void ClearSequence()
+        {
+            lock (locker) tasks.Clear();
+        }
+        //call for end Work() Method
+        public void Close()
+        {
+            ClearSequence();
+            wh.Set();
+            worker.Wait();         // Wait for the consumer's task to finish.
+            wh.Close();            // Release any OS resources.
+        }
+
+        async Task Work()
+        {
+            while (true)
+            {
+                if (wh.WaitOne(1))
+                    break;
+
+                foreach (Func<Task> task in tasks.Values)
+                {
+                    await task.Invoke();
+                }
             }
         }
     }
@@ -86,6 +180,7 @@ namespace MaterialDesignWithLiveChartSample.Class
 
         public void Dispose()
         {
+            //call this method for end consume method - blocking collection signal set
             taskQ.CompleteAdding();
             GC.SuppressFinalize(this);
         }
@@ -106,7 +201,7 @@ namespace MaterialDesignWithLiveChartSample.Class
         {
             foreach (WorkItem workItem in taskQ.GetConsumingEnumerable())
             {
-                RemainTaskCount=taskQ.Count;
+                RemainTaskCount = taskQ.Count;
                 if (workItem.CancelToken.HasValue &&
                    workItem.CancelToken.Value.IsCancellationRequested)
                 {

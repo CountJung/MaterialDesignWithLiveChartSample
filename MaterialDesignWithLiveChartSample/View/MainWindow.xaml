@@ -8,7 +8,9 @@
         xmlns:model="clr-namespace:MaterialDesignWithLiveChartSample.Model"
         xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
-        mc:Ignorable="d" Height="1080" Width="1920"
+        mc:Ignorable="d"
+        Width="{x:Static SystemParameters.PrimaryScreenWidth}"  
+        Height="{x:Static SystemParameters.PrimaryScreenHeight}"  
         Title="MainWindow" Left="0" Top="0"
         d:DataContext="{d:DesignInstance d:Type=vm:MainWindowViewModel, IsDesignTimeCreatable=True}"
         Style="{StaticResource MaterialDesignWindowCustom}"
@@ -84,7 +86,7 @@
                             <MaterialDesign:PackIcon Kind="VectorLine" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Angle" InputGestureText="A">
+                    <MenuItem Header="Angle" InputGestureText="A" Command="{Binding MenuItemTestCmd2}">
                         <MenuItem.Icon>
                             <MaterialDesign:PackIcon Kind="AngleAcute" />
                         </MenuItem.Icon>

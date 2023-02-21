@@ -35,11 +35,13 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
         {
             LineChartNumber, PieChartNumber, DataBaseNumber
         }
+        public SequenceTasker Sequence { get; private set; } = new();
         public MainWindowViewModel()
         {
             Instance = this;
             MainModel = new MainWindowModel();
-            MenuItemTestCmd = new DelegateCommand(MenuCommandTest);
+            MenuItemTestCmd = new DelegateCommand(MenuItemTest);
+            MenuItemTestCmd2= new DelegateCommand(MenuItemTest2);
             MenuViewModelInst = new MenuViewModel();
             ViewControlItems = new ObservableCollection<ControlItems>();
             ToggleChangeThemeCmd = new DelegateCommand(ToggleChangeTheme);
@@ -56,10 +58,11 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
         }
         public void OnClosingMainWindow(object? sender, CancelEventArgs e)
         {
+            Sequence.Close();
             DataBaseDisplayViewModel.Instance?.DBClose();
         }
         public ICommand MenuItemTestCmd { get; private set; }
-        private void MenuCommandTest(object sender)
+        private void MenuItemTest(object sender)
         {
             using PCQueue queueTask = new(1);
             queueTask.EnqueueTask(async () =>
@@ -79,34 +82,59 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
                 Trace.WriteLine($"More Test Count={queueTask.RemainTaskCount}");
                 SelectedControlItem = ViewControlItems?[2];
             });
-            queueTask.EnqueueTask( () =>
+            queueTask.EnqueueTask(async () =>
             {
                 // WPF automatically ensures that bindings are updated on the main thread.
-                Application.Current.Dispatcher.Invoke(async () =>
-                {
+                //Application.Current.Dispatcher.Invoke(async () =>
+                //{
                     for (int i = 0; i < 3; i++)
                     {
                         await Task.Delay(1000);
                         Trace.WriteLine("Loop Test");
                         SelectedControlItem = ViewControlItems?[i];
                     }
-                });
+                //});
             });
 
-            using QueueTasker queueTasker = new();
-            queueTasker.EnqueueTask(async () =>
+            //using QueueTasker queueTasker = new();
+            //queueTasker.EnqueueTask(async () =>
+            //{
+            //    for (int i = 0; i < 3; i++)
+            //    {
+            //        await Task.Delay(1000);
+            //        Trace.WriteLine("Loop Test");
+            //        SelectedControlItem = ViewControlItems?[i];
+            //    }
+            //});
+            //queueTasker.EnqueueTask(() =>
+            //{
+            //    Trace.WriteLine($"More Test");
+            //});
+
+            Sequence.AddSequence("ATest", async () =>
             {
-                for (int i = 0; i < 3; i++)
-                {
-                    await Task.Delay(1000);
-                    Trace.WriteLine("Loop Test");
-                    SelectedControlItem = ViewControlItems?[i];
-                }
+                await Task.Delay(1000);
+                Trace.WriteLine("A Test Loop Sequence");
+                SelectedControlItem= ViewControlItems?[0];
             });
-            queueTasker.EnqueueTask(() =>
+            Sequence.AddSequence("BTest", async () =>
             {
-                Trace.WriteLine($"More Test");
+                await Task.Delay(2000);
+                Trace.WriteLine("B Test Loop Sequence");
+                SelectedControlItem= ViewControlItems?[1];
             });
+            Sequence.AddSequence("CTest", async () =>
+            {
+                await Task.Delay(3000);
+                Trace.WriteLine("C Test Loop Sequence");
+                SelectedControlItem= ViewControlItems?[2];
+            });
+
+        }
+        public ICommand MenuItemTestCmd2 { get; private set; }
+        private void MenuItemTest2(object s)
+        {
+            Sequence.ClearSequence();
         }
         public ICommand ToggleChangeThemeCmd { get; private set; }
         private void ToggleChangeTheme(object sender)
