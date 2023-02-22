@@ -55,7 +55,7 @@ namespace MaterialDesignWithLiveChartSample.Class
         }
     }
 
-    //keyword using for easily dispose
+    //task queue concept test, using keyword, or call Dispose
     public class QueueTasker : IDisposable
     {
         readonly EventWaitHandle wh = new AutoResetEvent(false);
@@ -102,54 +102,65 @@ namespace MaterialDesignWithLiveChartSample.Class
             }
         }
     }
-    public class SequenceTasker
-    {
-        readonly EventWaitHandle wh = new AutoResetEvent(false);
-        readonly Task worker;
-        readonly object locker = new();
-        readonly Dictionary<string, Func<Task>> tasks = new();
 
-        public SequenceTasker()
+    //Test Concept
+    public class SequenceTask
+    {
+        class TaskWorker
         {
-            worker = Task.Run(Work);
+            readonly EventWaitHandle waitHandle = new AutoResetEvent(false);
+            readonly Func<Task> functionTask;
+            readonly Task worker;
+            public TaskWorker(Func<Task> act)
+            {
+                functionTask = act;
+                worker = Task.Run(Work);
+            }
+
+            private async Task Work()
+            {
+                while (true)
+                {
+                    if (waitHandle.WaitOne(1))
+                        break;
+
+                    await functionTask.Invoke();
+                }
+            }
+            public void Close()
+            {
+                waitHandle.Set();
+                worker.Wait();
+                waitHandle.Close();
+            }
         }
 
-        public void AddSequence(string seqName, Func<Task> task)
+        readonly object locker = new();
+        readonly Dictionary<string, TaskWorker> SequenceDic = new();
+
+        public void AddSequence(string seqName, Func<Task> act)
         {
-            lock (locker) tasks.TryAdd(seqName, task);
+            if (SequenceDic.ContainsKey(seqName))
+                return;
+            lock (locker) SequenceDic.Add(seqName, new TaskWorker(act));
         }
         public void RemoveSequence(string seqName)
         {
-            lock (locker) tasks.Remove(seqName);
+            if (SequenceDic.ContainsKey(seqName))
+            {
+                SequenceDic[seqName].Close();
+                lock (locker) SequenceDic.Remove(seqName);
+            }
         }
         public void ClearSequence()
         {
-            lock (locker) tasks.Clear();
-        }
-        //call for end Work() Method
-        public void Close()
-        {
-            ClearSequence();
-            wh.Set();
-            worker.Wait();         // Wait for the consumer's task to finish.
-            wh.Close();            // Release any OS resources.
-        }
-
-        async Task Work()
-        {
-            while (true)
-            {
-                if (wh.WaitOne(1))
-                    break;
-
-                foreach (Func<Task> task in tasks.Values)
-                {
-                    await task.Invoke();
-                }
-            }
+            foreach (var seq in SequenceDic.Values)
+                seq.Close();
+            lock (locker) SequenceDic.Clear();
         }
     }
 
+    // blocking task queue, call Dispose for end
     public class PCQueue : IDisposable
     {
         class WorkItem

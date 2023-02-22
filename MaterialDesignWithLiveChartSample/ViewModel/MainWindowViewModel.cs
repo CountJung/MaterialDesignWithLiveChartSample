@@ -35,7 +35,7 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
         {
             LineChartNumber, PieChartNumber, DataBaseNumber
         }
-        public SequenceTasker Sequence { get; private set; } = new();
+        public SequenceTask Sequence { get; private set; } = new();
         public MainWindowViewModel()
         {
             Instance = this;
@@ -58,43 +58,43 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
         }
         public void OnClosingMainWindow(object? sender, CancelEventArgs e)
         {
-            Sequence.Close();
+            Sequence.ClearSequence();
             DataBaseDisplayViewModel.Instance?.DBClose();
         }
         public ICommand MenuItemTestCmd { get; private set; }
         private void MenuItemTest(object sender)
         {
-            using PCQueue queueTask = new(1);
-            queueTask.EnqueueTask(async () =>
-            {
-                await Task.Delay(1000);
-                Trace.WriteLine($"task queue test Count={queueTask.RemainTaskCount}");
-                SelectedControlItem = ViewControlItems?[0];
-            });
-            queueTask.EnqueueTask(async () =>
-            {
-                await Task.Delay(2000);
-                Trace.WriteLine($"More Test Count={queueTask.RemainTaskCount}");
-                SelectedControlItem = ViewControlItems?[1];
-            });
-            queueTask.EnqueueTask(() =>
-            {
-                Trace.WriteLine($"More Test Count={queueTask.RemainTaskCount}");
-                SelectedControlItem = ViewControlItems?[2];
-            });
-            queueTask.EnqueueTask(async () =>
-            {
-                // WPF automatically ensures that bindings are updated on the main thread.
-                //Application.Current.Dispatcher.Invoke(async () =>
-                //{
-                    for (int i = 0; i < 3; i++)
-                    {
-                        await Task.Delay(1000);
-                        Trace.WriteLine("Loop Test");
-                        SelectedControlItem = ViewControlItems?[i];
-                    }
-                //});
-            });
+            //using PCQueue queueTask = new(1);
+            //queueTask.EnqueueTask(async () =>
+            //{
+            //    await Task.Delay(1000);
+            //    Trace.WriteLine($"task queue test Count={queueTask.RemainTaskCount}");
+            //    SelectedControlItem = ViewControlItems?[0];
+            //});
+            //queueTask.EnqueueTask(async () =>
+            //{
+            //    await Task.Delay(2000);
+            //    Trace.WriteLine($"More Test Count={queueTask.RemainTaskCount}");
+            //    SelectedControlItem = ViewControlItems?[1];
+            //});
+            //queueTask.EnqueueTask(() =>
+            //{
+            //    Trace.WriteLine($"More Test Count={queueTask.RemainTaskCount}");
+            //    SelectedControlItem = ViewControlItems?[2];
+            //});
+            //queueTask.EnqueueTask(async () =>
+            //{
+            //    // WPF automatically ensures that bindings are updated on the main thread.
+            //    //Application.Current.Dispatcher.Invoke(async () =>
+            //    //{
+            //        for (int i = 0; i < 3; i++)
+            //        {
+            //            await Task.Delay(1000);
+            //            Trace.WriteLine("Loop Test");
+            //            SelectedControlItem = ViewControlItems?[i];
+            //        }
+            //    //});
+            //});
 
             //using QueueTasker queueTasker = new();
             //queueTasker.EnqueueTask(async () =>
@@ -115,26 +115,27 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
             {
                 await Task.Delay(1000);
                 Trace.WriteLine("A Test Loop Sequence");
-                SelectedControlItem= ViewControlItems?[0];
+                SelectedControlItem = ViewControlItems?[0];
             });
             Sequence.AddSequence("BTest", async () =>
             {
                 await Task.Delay(2000);
                 Trace.WriteLine("B Test Loop Sequence");
-                SelectedControlItem= ViewControlItems?[1];
+                SelectedControlItem = ViewControlItems?[1];
             });
             Sequence.AddSequence("CTest", async () =>
             {
                 await Task.Delay(3000);
                 Trace.WriteLine("C Test Loop Sequence");
-                SelectedControlItem= ViewControlItems?[2];
+                SelectedControlItem = ViewControlItems?[2];
             });
-
         }
         public ICommand MenuItemTestCmd2 { get; private set; }
         private void MenuItemTest2(object s)
         {
-            Sequence.ClearSequence();
+            //Sequence.ClearSequence();
+            Sequence.RemoveSequence("ATest");
+            Sequence.RemoveSequence("BTest");
         }
         public ICommand ToggleChangeThemeCmd { get; private set; }
         private void ToggleChangeTheme(object sender)
