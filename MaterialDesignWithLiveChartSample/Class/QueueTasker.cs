@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MaterialDesignWithLiveChartSample.Class
 {
@@ -94,12 +95,22 @@ namespace MaterialDesignWithLiveChartSample.Class
                     {
                         task = tasks.Dequeue();
                         task?.Invoke();
+                        //SyncUI(task);
                         if (task == null) return; //dispose end
                     }
                 }
                 if (task == null)
                     wh.WaitOne();         // No more tasks - wait for a signal
             }
+        }
+        //ui thread Sync test
+        public static void SyncUI(Action? action) 
+        {
+            if (action == null) return;
+            if(Application.Current.Dispatcher.CheckAccess())
+                action?.Invoke();
+            else
+                Application.Current.Dispatcher.BeginInvoke(action);
         }
     }
 
@@ -123,7 +134,6 @@ namespace MaterialDesignWithLiveChartSample.Class
                 {
                     if (waitHandle.WaitOne(1))
                         break;
-
                     await functionTask.Invoke();
                 }
             }
