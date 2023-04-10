@@ -1,4 +1,7 @@
 ﻿using MaterialDesignWithLiveChartSample.ViewModel;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Windows;
 
 namespace MaterialDesignWithLiveChartSample
@@ -8,11 +11,11 @@ namespace MaterialDesignWithLiveChartSample
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(ILogger<MainWindow> logger, IServiceProvider serviceProvider)
         {
             MaterialDesignWindowCustom.RegisterCommands(this);
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
+            DataContext = new MainWindowViewModel(logger, serviceProvider);
             Closing += ((MainWindowViewModel)DataContext).OnClosingMainWindow;
         }
     }

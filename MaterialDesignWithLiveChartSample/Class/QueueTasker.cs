@@ -104,10 +104,10 @@ namespace MaterialDesignWithLiveChartSample.Class
             }
         }
         //ui thread Sync test
-        public static void SyncUI(Action? action) 
+        public static void SyncUI(Action? action)
         {
             if (action == null) return;
-            if(Application.Current.Dispatcher.CheckAccess())
+            if (Application.Current.Dispatcher.CheckAccess())
                 action?.Invoke();
             else
                 Application.Current.Dispatcher.BeginInvoke(action);
@@ -150,10 +150,12 @@ namespace MaterialDesignWithLiveChartSample.Class
 
         public void AddSequence(string seqName, Func<Task> act)
         {
+            if (act is null) return;
             if (SequenceDic.ContainsKey(seqName))
                 return;
             lock (locker) SequenceDic.Add(seqName, new TaskWorker(act));
         }
+
         public void RemoveSequence(string seqName)
         {
             if (SequenceDic.ContainsKey(seqName))

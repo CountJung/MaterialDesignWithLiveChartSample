@@ -2,17 +2,16 @@
 using MaterialDesignWithLiveChartSample.Class;
 using MaterialDesignWithLiveChartSample.Model;
 using MaterialDesignWithLiveChartSample.View;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace MaterialDesignWithLiveChartSample.ViewModel
 {
@@ -39,17 +38,24 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
             LineChartNumber, PieChartNumber, DataBaseNumber
         }
         public SequenceTask Sequence { get; private set; } = new();
-        public MainWindowViewModel()
+        private readonly ILogger? logger;
+        private readonly IServiceProvider? serviceProvider;
+        public MainWindowViewModel(ILogger? logger, IServiceProvider? serviceProvider)
         {
             Instance = this;
             MainModel = new MainWindowModel();
             MenuItemTestCmd = new DelegateCommand(MenuItemTest);
-            MenuItemTestCmd2= new DelegateCommand(MenuItemTest2);
+            MenuItemTestCmd2 = new DelegateCommand(MenuItemTest2);
             MenuViewModelInst = new MenuViewModel();
             ViewControlItems = new ObservableCollection<ControlItems>();
             ToggleChangeThemeCmd = new DelegateCommand(ToggleChangeTheme);
 
             InitializeCustomControls();
+            this.serviceProvider = serviceProvider;
+            this.logger = logger;
+            Settings? settings = serviceProvider?.GetService<Settings>();
+            string message = "test setting = " + settings?.DefaultSetting;
+            logger?.LogInformation(message);
         }
 
         private void InitializeCustomControls()
