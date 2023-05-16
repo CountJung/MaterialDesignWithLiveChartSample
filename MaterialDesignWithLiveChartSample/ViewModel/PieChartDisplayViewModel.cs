@@ -3,6 +3,7 @@ using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using MaterialDesignWithLiveChartSample.Model;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace MaterialDesignWithLiveChartSample.ViewModel
@@ -10,17 +11,62 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
     public class PieChartDisplayViewModel : ViewModelBase
     {
         public static PieChartDisplayViewModel? Instance { get; private set; }
-        private PieChartDisplayModel? model;
-        public PieChartDisplayModel? Model { get => model; private set => Set(ref model, value, nameof(Model)); }
+        //private PieChartDisplayModel? model;
+        //public PieChartDisplayModel? Model { get => model; private set => Set(ref model, value, nameof(Model)); }
         public PieChartDisplayViewModel()
         {
             Instance = this;
-            Model = new PieChartDisplayModel();
+            //Model = new PieChartDisplayModel();
             PieChartCountSetCmd = new DelegateCommand(PieChartCountSet);
             //TestCommandBtnCmd = new DelegateCommand(TestCommandBtn);
             AddChartDataCmd = new DelegateCommand(AddChartData);
             RemoveChartDataCmd = new DelegateCommand(RemoveChartData);
+            PieChartAsset = new ObservableCollection<PieChartNode>();
+            for (uint i = 0; i < 5; i++)
+            {
+                PieChartAsset.Add(new PieChartNode(i));
+            }
         }
+        private ObservableCollection<PieChartNode>? pieChartAsset;
+        public ObservableCollection<PieChartNode>? PieChartAsset
+        { get => pieChartAsset; set => Set(ref pieChartAsset, value, nameof(PieChartAsset)); }
+
+        private uint? pieChartCount;
+        public uint? PieChartCount
+        {
+            get => pieChartCount;
+            set => Set(ref pieChartCount, value > 50 ? 50 : value, nameof(PieChartCount));
+        }
+        private int? currentChartNumber;
+        public int? CurrentChartNumber
+        {
+            get => currentChartNumber;
+            set
+            {
+                if (value < pieChartAsset?.Count)
+                {
+                    Set(ref currentChartNumber, value, nameof(CurrentChartNumber));
+                    CurrentChartVisibility = PieChartAsset?[CurrentChartNumber ?? 0].ChartVisible;
+                }
+            }
+        }
+        private bool? currentChartVisibility;
+        public bool? CurrentChartVisibility
+        {
+            get
+            {
+                currentChartVisibility = PieChartAsset?[CurrentChartNumber ?? 0].ChartVisible;
+                return currentChartVisibility;
+            }
+            set
+            {
+                PieChartNode node = PieChartAsset?[CurrentChartNumber ?? 0]!;
+                node.ChartVisible = value;
+                Set(ref currentChartVisibility, value, nameof(CurrentChartVisibility));
+            }
+        }
+        private double? pieChartData;
+        public double? PieChartData { get => pieChartData; set => Set(ref pieChartData, value, nameof(PieChartData)); }
         /// <summary>
         /// Creating Charts without Closing parent window causes memory leak
         /// https://blog.jetbrains.com/dotnet/2014/09/04/fighting-common-wpf-memory-leaks-with-dotmemory/
@@ -28,37 +74,26 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
         public ICommand PieChartCountSetCmd { get; private set; }
         public void PieChartCountSet(object s)
         {
-            //foreach (PieChartNode pies in Model?.PieChartData ?? Enumerable.Empty<PieChartNode>())
-            //{
-            //    for(int i=0;i< pies.ControlValue?.Count; i++)
-            //    {
-            //        pies.ControlValue[i].Clear();
-            //    }
-            //    pies.ControlValue?.Clear();
-            //    pies.PieChartSeries?.Clear();
-            //}
-            //Model?.PieChartData?.Clear();
-
-            uint chartCount = Model?.PieChartCount ?? 0;
-            int currentChartCount = model?.PieChartAsset?.Count ?? 0;
+            uint chartCount = PieChartCount ?? 0;
+            int currentChartCount = PieChartAsset?.Count ?? 0;
             for (uint i = (uint)currentChartCount; i < chartCount; i++)
             {
-                Model?.PieChartAsset?.Add(new PieChartNode(i));
+                PieChartAsset?.Add(new PieChartNode(i));
             }
             for (int i = 0; i < currentChartCount; i++)
             {
-                PieChartNode pieNode = Model?.PieChartAsset?[i]!;
+                PieChartNode pieNode = PieChartAsset?[i]!;
                 pieNode.ChartVisible = i < chartCount;
             }
         }
         public ICommand AddChartDataCmd { get; private set; }
         public void AddChartData(object s)
         {
-            PieChartNode pieNode = Model?.PieChartAsset?[Model?.CurrentChartNumber ?? 0]!;
+            PieChartNode pieNode = PieChartAsset?[CurrentChartNumber ?? 0]!;
             PieSeries pieSeries = new ()
             {
                 Title = "AddData",
-                Values = new ChartValues<ObservableValue> { new ObservableValue((double)(Model?.PieChartData!)) },
+                Values = new ChartValues<ObservableValue> { new ObservableValue((double)(PieChartData ?? 1)) },
                 DataLabels = true
             };
             pieNode.PieChartSeries?.Add(pieSeries);
@@ -66,7 +101,7 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
         public ICommand RemoveChartDataCmd { get; private set; }
         public void RemoveChartData(object s)
         {
-            PieChartNode pieNode = Model?.PieChartAsset?[Model.CurrentChartNumber ?? 0]!;
+            PieChartNode pieNode = PieChartAsset?[CurrentChartNumber ?? 0]!;
             pieNode.PieChartSeries?.RemoveAt(pieNode.PieChartSeries.Count - 1);
         }
         public static void RemoveAll(IList list)

@@ -15,7 +15,8 @@ namespace MaterialDesignWithLiveChartSample
         {
             MaterialDesignWindowCustom.RegisterCommands(this);
             InitializeComponent();
-            DataContext = new MainWindowViewModel(logger, serviceProvider);
+            DataContext = new MainWindowViewModel(/*logger, serviceProvider*/);
+            ((MainWindowViewModel)DataContext).InitializeCustomControls(logger, serviceProvider);
             Closing += ((MainWindowViewModel)DataContext).OnClosingMainWindow;
         }
     }

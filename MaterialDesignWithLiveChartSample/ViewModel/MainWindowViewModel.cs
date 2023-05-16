@@ -19,6 +19,8 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
     {
         public static MainWindowViewModel? Instance { get; private set; }
         public MainWindowModel? MainModel { get; private set; }
+        private bool darkTheme;
+        public bool DarkTheme { get => darkTheme; set => Set(ref darkTheme, value, nameof(DarkTheme)); }
         public MenuViewModel? MenuViewModelInst { get; private set; }
         public ObservableCollection<ControlItems>? ViewControlItems { get; }
         private ControlItems? selectedControlItem;
@@ -38,9 +40,11 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
             LineChartNumber, PieChartNumber, DataBaseNumber
         }
         public SequenceTask Sequence { get; private set; } = new();
-        private readonly ILogger? logger;
-        private readonly IServiceProvider? serviceProvider;
-        public MainWindowViewModel(ILogger? logger, IServiceProvider? serviceProvider)
+        //todo : chage to property
+        public ILogger? MainLogger { get; private set; }
+        public IServiceProvider? MainServiceProvider { get; private set; }
+        //void parameter ViewModel for xaml designer IsDesignTimeCreatable set true 
+        public MainWindowViewModel()
         {
             Instance = this;
             MainModel = new MainWindowModel();
@@ -49,22 +53,22 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
             MenuViewModelInst = new MenuViewModel();
             ViewControlItems = new ObservableCollection<ControlItems>();
             ToggleChangeThemeCmd = new DelegateCommand(ToggleChangeTheme);
+            DarkTheme = true;
 
-            InitializeCustomControls();
-            this.serviceProvider = serviceProvider;
-            this.logger = logger;
-            Settings? settings = serviceProvider?.GetService<Settings>();
-            string message = "test setting = " + settings?.DefaultSetting;
-            logger?.LogInformation(message);
-        }
-
-        private void InitializeCustomControls()
-        {
             ViewControlItems?.Add(new ControlItems("LineChartDisplay", typeof(LineChartDisplay)));
             ViewControlItems?.Add(new ControlItems("PieChartDisplay", typeof(PieChartDisplay)));
             ViewControlItems?.Add(new ControlItems("DataBaseDisplay", typeof(DataBaseDisplay)));
             SelectedControlItem = ViewControlItems?[(int)DisplayNumber.PieChartNumber];
         }
+
+        public void InitializeCustomControls(ILogger? logger, IServiceProvider? serviceProvider)
+        {
+            MainLogger = logger;
+            MainServiceProvider = serviceProvider;
+            Settings? settings = MainServiceProvider?.GetService<Settings>();
+            MainLogger?.LogInformation("test setting = ", settings?.DefaultSetting);
+        }
+
         public void OnClosingMainWindow(object? sender, CancelEventArgs e)
         {
             Sequence.ClearSequence();
@@ -164,8 +168,7 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
         public ICommand ToggleChangeThemeCmd { get; private set; }
         private void ToggleChangeTheme(object sender)
         {
-            if (MainModel is not null)
-                SetDarkTheme(MainModel.DarkTheme);
+            SetDarkTheme(DarkTheme);
         }
         private void SetDarkTheme(bool dark)
         {

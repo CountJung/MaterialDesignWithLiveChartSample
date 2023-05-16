@@ -13,34 +13,34 @@ namespace MaterialDesignWithLiveChartSample.Model
 {
     public class DataBaseDisplayModel:ViewModelBase
     {
-        public string? HostIP { get; set; }
-        public int Port { get; set; }
-        public string? DefaultDataBase { get; set; }
-        public string? UserID { get; set; }
-        public string? PassWord { get; set; }
-        public SecureString? SecurePassWord { get; set; }
-        private bool dbConnected;
-        public bool DBConnected { get => dbConnected; set => Set(ref dbConnected, value, nameof(DBConnected)); }
-        public ObservableCollection<EmoticonList>? EmoticonListCollection { get; }
-        private EmoticonList? selectedEmoticonList;
-        public EmoticonList? SelectedEmoticonList 
-        {
-            get => selectedEmoticonList ??= new EmoticonList();
-            set 
-            { 
-                Set(ref selectedEmoticonList, value, nameof(SelectedEmoticonList));
-                //DataBaseDisplayViewModel.Instance?.ModifySelectedEmoticon();
-            }
-        }
-        public DataBaseDisplayModel()
-        {
-            EmoticonListCollection= new ObservableCollection<EmoticonList>();
-            HostIP = "localhost";
-            Port = 3306;
-            DefaultDataBase = "testdatabase";
-            UserID = "root";
-            PassWord = "MariaDBTest";
-        }
+        //public string? HostIP { get; set; }
+        //public int Port { get; set; }
+        //public string? DefaultDataBase { get; set; }
+        //public string? UserID { get; set; }
+        //public string? PassWord { get; set; }
+        //public SecureString? SecurePassWord { get; set; }
+        //private bool dbConnected;
+        //public bool DBConnected { get => dbConnected; set => Set(ref dbConnected, value, nameof(DBConnected)); }
+        //public ObservableCollection<EmoticonList>? EmoticonListCollection { get; }
+        //private EmoticonList? selectedEmoticonList;
+        //public EmoticonList? SelectedEmoticonList 
+        //{
+        //    get => selectedEmoticonList ??= new EmoticonList();
+        //    set 
+        //    { 
+        //        Set(ref selectedEmoticonList, value, nameof(SelectedEmoticonList));
+        //        //DataBaseDisplayViewModel.Instance?.ModifySelectedEmoticon();
+        //    }
+        //}
+        //public DataBaseDisplayModel()
+        //{
+        //    EmoticonListCollection= new ObservableCollection<EmoticonList>();
+        //    HostIP = "localhost";
+        //    Port = 3306;
+        //    DefaultDataBase = "testdatabase";
+        //    UserID = "root";
+        //    PassWord = "MariaDBTest";
+        //}
         public static string? SecureStringToString(SecureString value)
         {
             IntPtr valuePtr = IntPtr.Zero;

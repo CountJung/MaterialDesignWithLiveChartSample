@@ -2,22 +2,24 @@ using MaterialDesignWithLiveChartSample.Class;
 using MaterialDesignWithLiveChartSample.Model;
 using MySqlConnector;
 using System;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
+using System.Security;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Xml.Linq;
 
 namespace MaterialDesignWithLiveChartSample.ViewModel
 {
-    public class DataBaseDisplayViewModel
+    public class DataBaseDisplayViewModel : ViewModelBase
     {
         public static DataBaseDisplayViewModel? Instance { get; private set; }
-        public DataBaseDisplayModel? Model { get; private set; }
+        //public DataBaseDisplayModel? Model { get; private set; }
         public DataBaseDisplayViewModel()
         {
             Instance = this;
-            Model = new DataBaseDisplayModel();
+            //Model = new DataBaseDisplayModel();
             //DBConnectionTest();
             DBConnectCmd = new DelegateCommand(DBConnect);
             DBDisconnectCmd = new DelegateCommand(DBDisconnect);
@@ -25,20 +27,47 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
             AddEmoticonCmd = new DelegateCommand(AddEmoticon);
             DeleteSelectedEmoticonCmd = new DelegateCommand(DeleteSelectedEmoticon);
             ModifySelectedEmoticonCmd = new DelegateCommand(ModifySelectedEmoticon);
+
+            EmoticonListCollection = new ObservableCollection<EmoticonList>();
+            HostIP = "localhost";
+            Port = 3306;
+            DefaultDataBase = "testdatabase";
+            UserID = "root";
+            PassWord = "MariaDBTest";
         }
         private MySqlConnection? dbConnection;
-
+        private string? hostIP;
+        public string? HostIP { get => hostIP; set => Set(ref hostIP, value, nameof(HostIP)); }
+        private int port;
+        public int Port { get => port; set => Set(ref port, value, nameof(Port)); }
+        private string? defaultDataBase;
+        public string? DefaultDataBase { get => defaultDataBase; set => Set(ref defaultDataBase, value, nameof(defaultDataBase)); }
+        private string? userID;
+        public string? UserID { get => userID; set => Set(ref userID, value, nameof(UserID)); }
+        private string? passWord;
+        public string? PassWord { get => passWord; set => Set(ref passWord, value, nameof(PassWord)); }
+        private SecureString? securePassWord;
+        public SecureString? SecurePassWord { get => securePassWord; set => Set(ref securePassWord, value, nameof(SecurePassWord)); }
+        private bool dbConnected;
+        public bool DBConnected { get => dbConnected; set => Set(ref dbConnected, value, nameof(DBConnected)); }
         public ICommand DBConnectCmd { get; private set; }
+        public ObservableCollection<EmoticonList>? EmoticonListCollection { get; }
+        private EmoticonList? selectedEmoticonList;
+        public EmoticonList? SelectedEmoticonList
+        {
+            get => selectedEmoticonList ??= new EmoticonList();
+            set => Set(ref selectedEmoticonList, value, nameof(SelectedEmoticonList));
+        }
         private void DBConnect(object s)
         {
             if (dbConnection?.State != ConnectionState.Open)
             {
-                string? pass = DataBaseDisplayModel.SecureStringToString(Model?.SecurePassWord!);
-                string connectionString = $"Host={Model?.HostIP};Port={Model?.Port};Database={Model?.DefaultDataBase};Uid={Model?.UserID};Pwd={Model?.PassWord};";
+                string? pass = DataBaseDisplayModel.SecureStringToString(SecurePassWord!);
+                string connectionString = $"Host={HostIP};Port={Port};Database={DefaultDataBase};Uid={UserID};Pwd={PassWord};";
                 dbConnection = new MySqlConnection(connectionString);
                 dbConnection.Open();
-                Model!.DBConnected = dbConnection?.State == ConnectionState.Open;
-                if ((bool)Model?.DBConnected!)
+                DBConnected = dbConnection?.State == ConnectionState.Open;
+                if ((bool)DBConnected!)
                     SelectAllEmoticonList();
             }
         }
@@ -54,8 +83,8 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
                 dbConnection.Close();
                 dbConnection.Dispose();
             }
-            Model!.DBConnected = dbConnection?.State == ConnectionState.Open;
-            Model?.EmoticonListCollection?.Clear();
+            DBConnected = dbConnection?.State == ConnectionState.Open;
+            EmoticonListCollection?.Clear();
         }
         public ICommand SelectAllEmoticonListCmd { get; private set; }
         private void SelectAllEmoticonListBtn(object s)
@@ -68,7 +97,7 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
             {
                 if (dbConnection?.State == ConnectionState.Open)
                 {
-                    Model?.EmoticonListCollection?.Clear();
+                    EmoticonListCollection?.Clear();
                     string query = "select * from emoticontextdata";
                     MySqlDataAdapter adapter;
                     DataTable dataTable = new();
@@ -86,7 +115,7 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
                             else if (header == "Description") emoticon.Description = value!;
                             else if (header == "Emoticon") emoticon.Emoticon = value!;
                         }
-                        Model?.EmoticonListCollection?.Add(emoticon);
+                        EmoticonListCollection?.Add(emoticon);
                     }
                 }
             }
@@ -105,8 +134,8 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
                 if (dbConnection?.State == ConnectionState.Open)
                 {
                     EmoticonList emoticon = new();
-                    int listCount = (int)Model?.EmoticonListCollection?.Count!;
-                    int ID = listCount == 0 ? 0 : (int)Model?.EmoticonListCollection[listCount - 1].ID!;
+                    int listCount = (int)EmoticonListCollection?.Count!;
+                    int ID = listCount == 0 ? 0 : (int)EmoticonListCollection[listCount - 1].ID!;
                     emoticon.ID = ID + 1; emoticon.Name = "Slightly Smiling Face"; emoticon.Emoticon = "🙂"; 
                     emoticon.Description = "A yellow face with simple, open eyes and a thin, closed smile. Conveys a wide range of positive, happy, and friendly sentiments. Its tone can also be patronizing, passive-aggressive, or ironic, as if saying This is fine when it’s really not.";
                     MySqlCommand sqlCommand = new();
@@ -133,7 +162,7 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
             {
                 if (dbConnection?.State == ConnectionState.Open)
                 {
-                    int ID = (int)Model?.SelectedEmoticonList?.ID!;
+                    int ID = (int)SelectedEmoticonList?.ID!;
                     MySqlCommand sqlCommand = new();
                     string cmdstring = $"delete from emoticontextdata where ID={ID}";
                     sqlCommand.Connection = dbConnection;
@@ -154,12 +183,12 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
             {
                 if (dbConnection?.State == ConnectionState.Open)
                 {
-                    int ID = (int)Model?.SelectedEmoticonList?.ID!;
-                    if (Model?.SelectedEmoticonList?.Name == null) return;
+                    int ID = (int)SelectedEmoticonList?.ID!;
+                    if (SelectedEmoticonList?.Name == null) return;
                     MySqlCommand sqlCommand = new();
                     string cmdstring = $"update emoticontextdata set" +
-                        $" Name='{Model?.SelectedEmoticonList?.Name}', Emoticon='{Model?.SelectedEmoticonList?.Emoticon}'," +
-                        $" Description='{Model?.SelectedEmoticonList?.Description}'" +
+                        $" Name='{SelectedEmoticonList?.Name}', Emoticon='{SelectedEmoticonList?.Emoticon}'," +
+                        $" Description='{SelectedEmoticonList?.Description}'" +
                         $" where ID={ID}";
                     sqlCommand.Connection = dbConnection;
                     sqlCommand.CommandText = cmdstring;

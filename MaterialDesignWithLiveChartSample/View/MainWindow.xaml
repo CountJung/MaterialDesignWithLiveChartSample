@@ -34,7 +34,7 @@
                           x:Name="MenuToggleButton" Margin="5,0"/>
             <TextBlock Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Margin="5,0"/>
             <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" WindowChrome.IsHitTestVisibleInChrome="True" 
-                          x:Name="ThemeSwitch" Margin="5,0" IsChecked="{Binding MainModel.DarkTheme}" Command="{Binding ToggleChangeThemeCmd}"/>
+                          x:Name="ThemeSwitch" Margin="5,0" IsChecked="{Binding DarkTheme}" Command="{Binding ToggleChangeThemeCmd}"/>
         </StackPanel>
     </local:MaterialDesignWindowCustom.HeaderContent>
     

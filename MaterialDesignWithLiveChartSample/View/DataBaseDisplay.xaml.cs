@@ -31,8 +31,8 @@ namespace MaterialDesignWithLiveChartSample.View
         {
             if(DataContext!=null)
             {
-                DataBaseDisplayViewModel.Instance!.Model!.SecurePassWord = ((PasswordBox)sender).SecurePassword;
-                DataBaseDisplayViewModel.Instance!.Model!.PassWord = ((PasswordBox)sender).Password;
+                DataBaseDisplayViewModel.Instance!.SecurePassWord = ((PasswordBox)sender).SecurePassword;
+                DataBaseDisplayViewModel.Instance!.PassWord = ((PasswordBox)sender).Password;
             }
         }
     }

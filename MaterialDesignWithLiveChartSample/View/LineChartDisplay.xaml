@@ -21,19 +21,19 @@
         <TextBlock Grid.Row="0" Text="LineChart Content" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource TextBlockPaperTitle}"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock Text="Chart Data Input" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
-            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="First Data" Text="{Binding Model.FirstLineData}" Style="{StaticResource TextBoxAccentContent}"/>
-            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Second Data" Text="{Binding Model.SecondLineData}" Style="{StaticResource TextBoxAccentContent}"/>
+            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="First Data" Text="{Binding FirstLineData}" Style="{StaticResource TextBoxAccentContent}"/>
+            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Second Data" Text="{Binding SecondLineData}" Style="{StaticResource TextBoxAccentContent}"/>
             <Button Content="AddFirst" Margin="5,0" Command="{Binding FirstdataClickCmd}"/>
             <Button Content="Reset" Margin="5,0" Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}" Command="{Binding ResetdataClickCmd}"/>
         </StackPanel>
         <lvchart:CartesianChart Grid.Row="2">
-            <lvchart:CartesianChart Series="{Binding Model.SeriesCollection}" LegendLocation="Top" FlowDirection="RightToLeft"
+            <lvchart:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Top" FlowDirection="RightToLeft"
                                     Style="{StaticResource LineChartStyle}">
                 <lvchart:CartesianChart.AxisX>
-                    <lvchart:Axis Title="Salesman" LabelFormatter="{Binding Model.FormatterAxisX}"/>
+                    <lvchart:Axis Title="Salesman" LabelFormatter="{Binding FormatterAxisX}"/>
                 </lvchart:CartesianChart.AxisX>
                 <lvchart:CartesianChart.AxisY>
-                    <lvchart:Axis Title="Sold Apps" LabelFormatter="{Binding Model.FormatterAxisY}" Position="RightTop"/>
+                    <lvchart:Axis Title="Sold Apps" LabelFormatter="{Binding FormatterAxisY}" Position="RightTop"/>
                 </lvchart:CartesianChart.AxisY>
             </lvchart:CartesianChart>
         </lvchart:CartesianChart>

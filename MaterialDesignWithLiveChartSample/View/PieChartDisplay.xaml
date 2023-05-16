@@ -20,20 +20,19 @@
         <TextBlock Grid.Row="0" Text="PieChart Content" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource TextBlockPaperTitle}"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock Text="Chart Count" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
-            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Chart Count" Style="{StaticResource TextBoxAccentContent}" 
-                     Text="{Binding Model.PieChartCount}"/>
+            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Chart Count" Style="{StaticResource TextBoxAccentContent}" Text="{Binding PieChartCount}"/>
             <Button Content="Set" Margin="5,0" Command="{Binding PieChartCountSetCmd}"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock Text="Chart Manipulate" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
-            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Number" Style="{StaticResource TextBoxAccentContent}" Text="{Binding Model.CurrentChartNumber}"/>
-            <CheckBox Content="Visible" Margin="5,0" Style="{StaticResource CheckBoxAccent}" IsChecked="{Binding Model.CurrentChartVisibility}"/>
+            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Number" Style="{StaticResource TextBoxAccentContent}" Text="{Binding CurrentChartNumber}"/>
+            <CheckBox Content="Visible" Margin="5,0" Style="{StaticResource CheckBoxAccent}" IsChecked="{Binding CurrentChartVisibility}"/>
             <TextBlock Text="Input Data" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
-            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Data" Style="{StaticResource TextBoxAccentContent}" Text="{Binding Model.PieChartData}"/>
+            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Data" Style="{StaticResource TextBoxAccentContent}" Text="{Binding PieChartData}"/>
             <Button Content="Add" Margin="5,0" Command="{Binding AddChartDataCmd}"/>
             <Button Content="Remove" Margin="5,0" Command="{Binding RemoveChartDataCmd}" Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}"/>
         </StackPanel>
-        <ItemsControl x:Name="PieChartCollectionDisplay" Margin="0,20,0,0" Grid.Row="3" ItemsSource="{Binding Model.PieChartAsset}">
+        <ItemsControl x:Name="PieChartCollectionDisplay" Margin="0,20,0,0" Grid.Row="3" ItemsSource="{Binding PieChartAsset}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"/>
