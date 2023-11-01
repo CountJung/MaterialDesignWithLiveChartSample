@@ -52,7 +52,7 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
             MenuItemTestCmd2 = new DelegateCommand(MenuItemTest2);
             MenuViewModelInst = new MenuViewModel();
             ViewControlItems = new ObservableCollection<ControlItems>();
-            ToggleChangeThemeCmd = new DelegateCommand(ToggleChangeTheme);
+            //ToggleChangeThemeCmd = new DelegateCommand(ToggleChangeTheme);
             DarkTheme = true;
 
             ViewControlItems?.Add(new ControlItems("LineChartDisplay", typeof(LineChartDisplay)));
@@ -165,11 +165,15 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
             Sequence.RemoveSequence("BTest");
             Sequence.RemoveSequence("CTest");
         }
-        public ICommand ToggleChangeThemeCmd { get; private set; }
-        private void ToggleChangeTheme(object sender)
+        private DelegateCommand? toggleChangeTheme = null;
+        public ICommand ToggleChangeThemeCmd
         {
-            SetDarkTheme(DarkTheme);
+            get => toggleChangeTheme ??= new DelegateCommand((sender) => { SetDarkTheme(darkTheme); }); 
         }
+        //private void ToggleChangeTheme(object sender)
+        //{
+        //    SetDarkTheme(DarkTheme);
+        //}
         private void SetDarkTheme(bool dark)
         {
             if (MainModel is null)

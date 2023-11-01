@@ -31,8 +31,8 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
         public ObservableCollection<PieChartNode>? PieChartAsset
         { get => pieChartAsset; set => Set(ref pieChartAsset, value, nameof(PieChartAsset)); }
 
-        private uint? pieChartCount;
-        public uint? PieChartCount
+        private int? pieChartCount;
+        public int? PieChartCount
         {
             get => pieChartCount;
             set => Set(ref pieChartCount, value > 50 ? 50 : value, nameof(PieChartCount));
@@ -74,7 +74,7 @@ namespace MaterialDesignWithLiveChartSample.ViewModel
         public ICommand PieChartCountSetCmd { get; private set; }
         public void PieChartCountSet(object s)
         {
-            uint chartCount = PieChartCount ?? 0;
+            int chartCount = PieChartCount ?? 0;
             int currentChartCount = PieChartAsset?.Count ?? 0;
             for (uint i = (uint)currentChartCount; i < chartCount; i++)
             {

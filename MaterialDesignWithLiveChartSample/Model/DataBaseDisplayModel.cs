@@ -1,17 +1,11 @@
-﻿using MaterialDesignWithLiveChartSample.Class;
-using MaterialDesignWithLiveChartSample.ViewModel;
+﻿using MaterialDesignWithLiveChartSample.ViewModel;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MaterialDesignWithLiveChartSample.Model
 {
-    public class DataBaseDisplayModel:ViewModelBase
+    public class DataBaseDisplayModel : ViewModelBase
     {
         //public string? HostIP { get; set; }
         //public int Port { get; set; }

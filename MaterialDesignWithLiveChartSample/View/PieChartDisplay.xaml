@@ -7,6 +7,7 @@
              xmlns:vm="clr-namespace:MaterialDesignWithLiveChartSample.ViewModel"
              xmlns:lvchart="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:cc="clr-namespace:MaterialDesignWithLiveChartSample.CustomControl"
              d:DataContext="{d:DesignInstance d:Type=vm:PieChartDisplayViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" Background="{DynamicResource MaterialDesignPaper}" Foreground="{StaticResource MaterialDesignBody}"
              d:DesignHeight="400" d:DesignWidth="700">
@@ -20,7 +21,9 @@
         <TextBlock Grid.Row="0" Text="PieChart Content" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource TextBlockPaperTitle}"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock Text="Chart Count" Margin="5,0" Style="{StaticResource TextBlockAccentContent}"/>
-            <TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Chart Count" Style="{StaticResource TextBoxAccentContent}" Text="{Binding PieChartCount}"/>
+            <!--<TextBox Width="auto" Margin="5,0" MaterialDesign:HintAssist.Hint="Chart Count" Style="{StaticResource TextBoxAccentContent}" VerticalAlignment="Center"
+                     Text="{Binding Path=Value, RelativeSource={RelativeSource AncestorType=cc:NumericUpDown}}"/>-->
+            <cc:NumericUpDown Value="{Binding Path=PieChartCount, Mode=TwoWay }"/> 
             <Button Content="Set" Margin="5,0" Command="{Binding PieChartCountSetCmd}"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
